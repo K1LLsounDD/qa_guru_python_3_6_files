@@ -1,20 +1,16 @@
-import glob
 import os
 import zipfile
+from os.path import basename
 
-road = os.path.dirname(os.path.abspath(__file__))
-resour = os.path.join(road, 'resources')
-arch = os.path.join(resour, 'archive.zip')
-list_dir = glob.glob(resour)
 
-def create_arch():
-    with zipfile.ZipFile(arch, mode='w', \
-                         compression=zipfile.ZIP_DEFLATED) as zip_:
+def create_arch(path_files, path_archive):
+    list_dir = os.listdir(path_files)
+    with zipfile.ZipFile(path_archive, mode='w', compression=zipfile.ZIP_DEFLATED) as zip_:
         for file in list_dir:
-            add_file = os.path.join(resour, file)
-            zip_.write(add_file)
+            add_file = os.path.join(path_files, file)
+            zip_.write(add_file, basename(add_file))
 
-def delete_arch():
-    for file in list_dir:
-        del_file = os.path.join(arch)
-        os.remove(del_file)
+
+def delete_arch(path_archive):
+    del_file = os.path.join(path_archive)
+    os.remove(del_file)
