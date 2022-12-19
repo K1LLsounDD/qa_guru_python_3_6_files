@@ -1,3 +1,4 @@
+import csv
 import os
 import zipfile
 from zip_func import create_arch, delete_arch
@@ -11,6 +12,7 @@ zip_archive = os.path.join(path_resources, 'archive.zip')
 def test_read_pdf():
     delete_arch(zip_archive)
     create_arch(path_files, zip_archive)
+
     with zipfile.ZipFile(zip_archive) as zp:
         pdf_file = zp.extract('rekomend.pdf')
         reader = PyPDF2.PdfReader(pdf_file)
@@ -19,5 +21,18 @@ def test_read_pdf():
         assert 'Выдержка  из  " Методических  рекомендаций ..."' in text
     os.remove('rekomend.pdf')
 
+def test_read_csv():
+    delete_arch(zip_archive)
+    create_arch(path_files, zip_archive)
 
+    with zipfile.ZipFile(zip_archive) as cvs:
+        csv_file = cvs.extract('orders.csv')
+        with open(csv_file) as csvfile:
+            csvfile = csv.reader(csvfile)
+            csv_list = []
+            for r in csvfile:
+                text = ' '.join(r).replace(';', ' ')
+                csv_list.append(text)
+        assert csv_list[1] == '35622 Иванов Отклонен'
+    os.remove('orders.csv')
 
