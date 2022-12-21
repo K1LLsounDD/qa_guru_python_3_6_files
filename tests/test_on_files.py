@@ -11,6 +11,7 @@ zip_archive = os.path.join(path_resources, 'archive.zip')
 
 
 def test_read_pdf():
+    delete_arch(zip_archive)
     create_arch(path_files, zip_archive)
 
     with zipfile.ZipFile(zip_archive) as zp:
@@ -48,4 +49,3 @@ def test_read_xlsx():
         sheet = workbook.active
         assert sheet.cell(row=4, column=2).value == 'Philip'
     os.remove('file_example_XLSX_50.xlsx')
-    delete_arch(zip_archive)
